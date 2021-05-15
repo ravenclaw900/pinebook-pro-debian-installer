@@ -212,7 +212,7 @@ do_kernel () {
 	sudo install -m644 var/lib/alsa/asound.state ${SYSIMAGE}/var/lib/alsa/asound.state
 	on_target dpkg --add-architecture arm64
 	on_target apt-get update
-	if [ ${RELEASE} -eq buster ]
+	if [ ${RELEASE} == buster ]
 	then
 		on_target apt-get install -y linux-image-arm64/buster-backports
 	else
