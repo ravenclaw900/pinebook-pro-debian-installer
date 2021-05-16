@@ -143,6 +143,11 @@ do_debootstrap () {
 
 	do_swapfile
 
+	build_from_template etc/fstab
+	sudo install -m644 etc/fstab ${SYSIMAGE}/etc/fstab
+	sudo install -m644 etc/tmpfiles.d/* ${SYSIMAGE}/etc/tmpfiles.d
+	sudo install -m644 etc/apt/sources.list.${RELEASE} ${SYSIMAGE}/etc/apt/sources.list
+
 	if [ ! -z "$CRYPT" ]
 	then
 		build_from_template etc/fstab.crypt
@@ -162,10 +167,6 @@ do_swapfile () {
 	sudo dd if=/dev/zero of=${SYSIMAGE}/swapfile bs=1M count=2048 status=progress
 	sudo chmod 600 ${SYSIMAGE}/swapfile
 	sudo mkswap ${SYSIMAGE}/swapfile
-	build_from_template etc/fstab
-	sudo install -m644 etc/fstab ${SYSIMAGE}/etc/fstab
-	sudo install -m644 etc/tmpfiles.d/* ${SYSIMAGE}/etc/tmpfiles.d
-	sudo install -m644 etc/apt/sources.list.${RELEASE} ${SYSIMAGE}/etc/apt/sources.list
 }
 
 # The recipe to generate the tarball.
