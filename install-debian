@@ -140,14 +140,8 @@ do_debootstrap () {
 	fi
 
 	sudo tar -C ${SYSIMAGE} -xf debootstrap-${RELEASE}-${ARCH}.tar.gz
-	printf '\n\n>>>> Creating Swapfile\n\n'
-	sudo dd if=/dev/zero of=${SYSIMAGE}/swapfile bs=1M count=2048 status=progress
-	sudo chmod 600 ${SYSIMAGE}/swapfile
-	sudo mkswap ${SYSIMAGE}/swapfile
-	build_from_template etc/fstab
-	sudo install -m644 etc/fstab ${SYSIMAGE}/etc/fstab
-	sudo install -m644 etc/tmpfiles.d/* ${SYSIMAGE}/etc/tmpfiles.d
-	sudo install -m644 etc/apt/sources.list.${RELEASE} ${SYSIMAGE}/etc/apt/sources.list
+
+	do_swapfile
 
 	if [ ! -z "$CRYPT" ]
 	then
@@ -161,6 +155,17 @@ do_debootstrap () {
 	# will do this for us but if we roam networks between generating the
 	# cached image and consuming it then we must update the file.
 	sudo install -m644 /etc/resolv.conf ${SYSIMAGE}/etc/resolv.conf
+}
+
+do_swapfile () {
+	printf '\n\n>>>> Creating Swapfile\n\n'
+	sudo dd if=/dev/zero of=${SYSIMAGE}/swapfile bs=1M count=2048 status=progress
+	sudo chmod 600 ${SYSIMAGE}/swapfile
+	sudo mkswap ${SYSIMAGE}/swapfile
+	build_from_template etc/fstab
+	sudo install -m644 etc/fstab ${SYSIMAGE}/etc/fstab
+	sudo install -m644 etc/tmpfiles.d/* ${SYSIMAGE}/etc/tmpfiles.d
+	sudo install -m644 etc/apt/sources.list.${RELEASE} ${SYSIMAGE}/etc/apt/sources.list
 }
 
 # The recipe to generate the tarball.
