@@ -324,7 +324,7 @@ do_all () {
 }
 
 ARCH=arm64
-RELEASE=bullseye
+RELEASE=buster
 SYSIMAGE="${PWD}/sysimage"
 MMCBLK="$(readlink -f /dev/disk/by-path/platform-fe320000.*mmc)"
 
